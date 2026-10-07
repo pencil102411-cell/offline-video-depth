@@ -1,0 +1,16 @@
+# Local model cache (large, supplied separately)
+hf_cache/
+# Generated videos, metadata and previews
+*.mp4
+*.mov
+*.avi
+*_depth*.mp4
+*_depth*.mp4.json
+# Build products
+build/
+dist/
+*.spec.bak
+__pycache__/
+*.egg-info/
+# Local test/inspection artifacts
+depth_check/

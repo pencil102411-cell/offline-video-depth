@@ -1,0 +1,6 @@
+# Known-good versions used for local verification (CPU build).
+numpy==2.5.3
+opencv-python-headless==4.10.0.84
+Pillow==12.3.0
+torch==2.5.1+cpu
+transformers==4.45.2
