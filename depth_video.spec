@@ -1,10 +1,20 @@
-# PyInstaller one-folder build. The model cache is intentionally external so
+# PyInstaller one-folder build (depth-video.exe + _internal/). The model cache
+# is intentionally external so
 # the executable remains small; copy hf_cache/ beside the executable or pass
 # --cache-dir to a cache on the target machine.
-from PyInstaller.utils.hooks import collect_submodules
-
-hiddenimports = collect_submodules("transformers")
-
+hiddenimports = [
+    "transformers.models.depth_anything",
+    "transformers.models.depth_anything.configuration_depth_anything",
+    "transformers.models.depth_anything.image_processing_depth_anything",
+    "transformers.models.depth_anything.modeling_depth_anything",
+    "transformers.models.auto",
+    "transformers.pipelines",
+    "transformers.pipelines.depth_estimation",
+    "transformers.image_processing_utils",
+    "transformers.image_processing_base",
+    "transformers.processing_utils",
+    "transformers.tokenization_utils_base",
+]
 a = Analysis(
     ["depth_video.py"],
     pathex=["."],
@@ -14,9 +24,13 @@ a = Analysis(
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=["tensorflow", "flax", "jax"],
+    # Unused packages that the global environment would otherwise drag in.
+    excludes=["tensorflow", "flax", "jax", "pyarrow", "av", "onnxruntime", "pandas", "lxml", "hf_xet", "tkinter", "matplotlib", "IPython"],
     noarchive=False,
 )
 pyz = PYZ(a.pure)
-exe = EXE(pyz, a.scripts, a.binaries, a.datas, [], name="depth-video", console=True)
-coll = COLLECT(exe, a.binaries, a.datas, a.zipfiles, name="depth-video")
+# exclude_binaries keeps this a true one-folder build: embedding binaries in
+# the EXE turns it into a one-file bootloader that unpacks ~1 GB to %TEMP% on
+# every run and leaves it behind when a conversion is cancelled.
+exe = EXE(pyz, a.scripts, [], exclude_binaries=True, name="depth-video", console=True)
+coll = COLLECT(exe, a.binaries, a.datas, name="depth-video")

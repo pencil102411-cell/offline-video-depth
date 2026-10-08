@@ -1,7 +1,18 @@
 # PyInstaller one-folder build for the optional local browser UI.
-from PyInstaller.utils.hooks import collect_submodules
+hiddenimports = [
+    "transformers.models.depth_anything",
+    "transformers.models.depth_anything.configuration_depth_anything",
+    "transformers.models.depth_anything.image_processing_depth_anything",
+    "transformers.models.depth_anything.modeling_depth_anything",
+    "transformers.models.auto",
+    "transformers.pipelines",
+    "transformers.pipelines.depth_estimation",
+    "transformers.image_processing_utils",
+    "transformers.image_processing_base",
+    "transformers.processing_utils",
+    "transformers.tokenization_utils_base",
+]
 
-hiddenimports = collect_submodules("transformers")
 a = Analysis(
     ["depth_ui.py"],
     pathex=["."],
@@ -15,5 +26,7 @@ a = Analysis(
     noarchive=False,
 )
 pyz = PYZ(a.pure)
-exe = EXE(pyz, a.scripts, a.binaries, a.datas, [], name="depth-ui", console=True)
+exe = EXE(pyz, a.scripts, a.binaries, a.datas, [], name="depth-ui", console=False)
 coll = COLLECT(exe, a.binaries, a.datas, a.zipfiles, name="depth-ui")
+
+

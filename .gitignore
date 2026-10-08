@@ -14,3 +14,12 @@ __pycache__/
 *.egg-info/
 # Local test/inspection artifacts
 depth_check/
+# Desktop app build inputs/outputs (engine, installer, local install test)
+node_modules/
+release/
+test_install/
+src-tauri/target/
+src-tauri/gen/schemas/
+# Model weights are distributed with the installer, not in git (MODEL_CACHE.md)
+model_parts/
+depth_model_cache.tar.gz
